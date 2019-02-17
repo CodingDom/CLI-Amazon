@@ -14,7 +14,7 @@ CREATE TABLE products (
     -- Create a required string column called "department_name" --
     department_name VARCHAR(50) NOT NULL,
     -- Create a required numeric column called "price" --
-    price INTEGER(10) NOT NULL,
+    price FLOAT(6,2) NOT NULL,
     -- Create a numeric column called "stock_quantity" --
     stock_quantity INTEGER(10) default 0,
     -- Set the item_id as this table's primary key --
