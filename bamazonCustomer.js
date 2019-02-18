@@ -5,24 +5,16 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 const Promise = require("promise");
 
-const connection = mysql.createConnection({
-    host: "localhost",
-
-    port : 3306,
-
-    user : "test",
-
-    password : "Testing123",
-
-    database : "bamazon"
-});
+const connection = mysql.createConnection(require("./host.json"));
 
 // Storing gathered products
 let products = [];
 
 function displayProducts() {
     // Grabbing all product information from database
-    connection.query("SELECT item_id, product_name, price FROM products", function(err, res) {
+    connection.query(
+    "SELECT item_id, product_name, price FROM products", 
+    function(err, res) {
         if (err) throw err;
         // Reset products list
         products = [];
@@ -32,7 +24,7 @@ function displayProducts() {
         });
         // Loop through data to store information
         res.forEach(function(data) {
-            table.push([colors.yellow(data.item_id),colors.green(data.price),colors.blue(data.product_name)]);
+            table.push([colors.yellow(data.item_id),"$"+colors.green(data.price),colors.blue(data.product_name)]);
             products.push(data.product_name + " | ".red + "id:"+data.item_id);
         });
         // Display table of products
@@ -92,28 +84,27 @@ function makePurchase(id,quantity) {
     };
     // Checking how many products are in stock
     connection.query(
-        `SELECT stock_quantity,price FROM products WHERE item_id = ${id}`,
-        function(err, res) {
-            if (err) throw err;
-            const inStock = parseInt(res[0].stock_quantity);
-            // Checking if there are enough of the product in stock
-            if (quantity <= inStock) {
-                // Calculating total price
-                const price = (parseFloat(res[0].price)*quantity).toFixed(2);
-                // Removing stock from database
-                connection.query(
-                    `UPDATE products SET stock_quantity=stock_quantity-${quantity} WHERE item_id=${id}`,
-                    function(err2,res2) {
-                        if (err2) throw err2;
-                        console.log(`Purchase successful!\nTotal Cost: $${price}`.green);
-                        connection.end();
-                });
-            } else {
-                console.log("Sorry, we don't have enough in stock to fulfill your order..".red);
-                connection.end();
-            }
-        },
-    );
+    `SELECT stock_quantity,price FROM products WHERE item_id = ${id}`,
+    function(err, res) {
+        if (err) throw err;
+        const inStock = parseInt(res[0].stock_quantity);
+        // Checking if there are enough of the product in stock
+        if (quantity <= inStock) {
+            // Calculating total price
+            const price = (parseFloat(res[0].price)*quantity).toFixed(2);
+            // Removing stock from database
+            connection.query(
+                `UPDATE products SET stock_quantity=stock_quantity-${quantity} WHERE item_id=${id}`,
+                function(err2,res2) {
+                    if (err2) throw err2;
+                    console.log(`Purchase successful!\nTotal Cost: $${price}`.green);
+                    connection.end();
+            });
+        } else {
+            console.log("Sorry, we don't have enough in stock to fulfill your order..".red);
+            connection.end();
+        }
+    });
 };
 
 // Adding search to inquirer prompt method
