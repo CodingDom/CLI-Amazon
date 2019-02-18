@@ -12,9 +12,9 @@ CREATE TABLE products (
     -- Create a required string column called "product_name" --
     product_name VARCHAR(100) NOT NULL,
     -- Create a required string column called "department_name" --
-    department_name VARCHAR(50) NOT NULL,
+    department_name VARCHAR(50) default "Miscellaneous" NOT NULL,
     -- Create a required numeric column called "price" --
-    price FLOAT(6,2) NOT NULL,
+    price FLOAT(9,2) NOT NULL,
     -- Create a numeric column called "stock_quantity" --
     stock_quantity INTEGER(10) default 0,
     -- Set the item_id as this table's primary key --
