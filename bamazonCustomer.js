@@ -5,7 +5,7 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 const Promise = require("promise");
 
-const connection = mysql.createConnection(require("./host.json"));
+const connection = mysql.createConnection(require("./mysql-config.json"));
 
 // Storing gathered products
 let products = [];
@@ -24,7 +24,7 @@ function displayProducts() {
         });
         // Loop through data to store information
         res.forEach(function(data) {
-            table.push([colors.yellow(data.item_id),colors.green("$"+data.pric-e),colors.blue(data.product_name)]);
+            table.push([colors.yellow(data.item_id),colors.green("$"+data.price),colors.blue(data.product_name)]);
             products.push(data.product_name + " | ".red + "id:"+data.item_id);
         });
         // Display table of products
@@ -79,7 +79,7 @@ function makePurchase(id,quantity) {
         return;
     } else if (quantity <= 0) {
         // If no quantity present, cancel request
-        console.log("Cancelling purchase request".yellow);
+        console.log("\nCancelling purchase request\n".yellow);
         return connection.end();
     };
     // Checking how many products are in stock
@@ -94,18 +94,22 @@ function makePurchase(id,quantity) {
             const price = (parseFloat(res[0].price)*quantity).toFixed(2);
             // Removing stock from database
             connection.query(
-                `UPDATE products SET stock_quantity=stock_quantity-${quantity} WHERE item_id=${id}`,
+                `UPDATE products p INNER JOIN departments d ON (p.department_name = d.department_name) 
+                SET p.stock_quantity=p.stock_quantity-${quantity}, d.product_sales=d.product_sales+${price} 
+                WHERE p.item_id=${id}`,
                 function(err2,res2) {
                     if (err2) throw err2;
-                    console.log(`Purchase successful!\nTotal Cost: $${price}`.green);
+                    console.log(`\nPurchase successful!\nTotal Cost: $${price}\n`.green);
                     connection.end();
             });
         } else {
-            console.log("Sorry, we don't have enough in stock to fulfill your order..".red);
+            console.log("\nSorry, we don't have enough in stock to fulfill your order..\n".red);
             connection.end();
         }
     });
 };
+
+console.log("\nNow connecting to Bamazon\n".green);
 
 // Adding search to inquirer prompt method
 inquirer.registerPrompt('search', require('inquirer-autocomplete-prompt'));

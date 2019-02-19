@@ -46,4 +46,7 @@ VALUES ("Jewlry",3000);
 INSERT INTO departments (department_name,over_head_costs)
 VALUES ("Musical Instruments",1500);
 
+INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Miscellaneous",5000);
+
 SELECT *,(product_sales-over_head_costs) AS total_profits FROM departments;

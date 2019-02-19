@@ -5,7 +5,7 @@ const inquirer = require("inquirer");
 const mysql = require("mysql");
 const Promise = require("promise");
 
-const connection = mysql.createConnection(require("./host.json"));
+const connection = mysql.createConnection(require("./mysql-config.json"));
 
 const commandList = {
     "View Products for Sale":displayProducts,
