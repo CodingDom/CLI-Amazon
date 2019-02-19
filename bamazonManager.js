@@ -172,7 +172,7 @@ function promptCommands(wait=0) {
 };
 
 commandList["Exit".red] = function() {
-    console.log("Now quitting, goodbye!\n".yellow);
+    console.log("\nNow quitting, goodbye!\n".yellow);
     connection.end();
 }
 

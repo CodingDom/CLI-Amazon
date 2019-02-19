@@ -1,9 +1,7 @@
 const Table = require("cli-table2");
 const colors = require("colors");
-const fuzzy = require("fuzzy");
 const inquirer = require("inquirer");
 const mysql = require("mysql");
-const Promise = require("promise");
 
 const connection = mysql.createConnection(require("./mysql-config.json"));
 
@@ -98,7 +96,7 @@ function addDepartment() {
 };
 
 commandList["Exit".red] = function() {
-    console.log("Now quitting, goodbye!\n".yellow);
+    console.log("\nNow quitting, goodbye!\n".yellow);
     connection.end();
 }
 
