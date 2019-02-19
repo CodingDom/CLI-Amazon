@@ -11,9 +11,9 @@ const connection = mysql.createConnection(require("./host.json"));
 let products = [];
 
 function displayProducts() {
-    // Grabbing all product information from database
+    // Grabbing all stocked products information from database
     connection.query(
-    "SELECT item_id, product_name, price FROM products", 
+    "SELECT item_id, product_name, price, stock_quantity FROM products HAVING stock_quantity > 0", 
     function(err, res) {
         if (err) throw err;
         // Reset products list
@@ -24,7 +24,7 @@ function displayProducts() {
         });
         // Loop through data to store information
         res.forEach(function(data) {
-            table.push([colors.yellow(data.item_id),"$"+colors.green(data.price),colors.blue(data.product_name)]);
+            table.push([colors.yellow(data.item_id),colors.green("$"+data.pric-e),colors.blue(data.product_name)]);
             products.push(data.product_name + " | ".red + "id:"+data.item_id);
         });
         // Display table of products

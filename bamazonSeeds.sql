@@ -2,13 +2,13 @@ Use bamazon;
 
 -- Create mock products to populate table
 INSERT INTO products (product_name,department_name,price,stock_quantity)
-VALUES ("Samsung 52-inch Television","Electronics",300,12);
+VALUES ("Samsung 52-inch Television","Electronics",300,20);
 
 INSERT INTO products (product_name,department_name,price,stock_quantity)
 VALUES ("Logictech Wireless Mouse","Electronics",13,30);
 
 INSERT INTO products (product_name,department_name,price,stock_quantity)
-VALUES ("Echo (2nd Generation) - Smart speaker with Alexa","Electronics",85,60);
+VALUES ("Echo (2nd Generation) - Smart speaker with Alexa","Electronics",85,75);
 
 INSERT INTO products (product_name,department_name,price,stock_quantity)
 VALUES ("Anker Powerline II Lightning Cable","Cell Phones & Accessories",12,500);
@@ -32,3 +32,18 @@ INSERT INTO products (product_name,department_name,price,stock_quantity)
 VALUES ("Drum Set","Musical Instruments",550,2);
 
 SELECT * FROM products;
+
+-- Create mock departments to populate database
+INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Electronics",8000);
+
+INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Cell Phones & Accessories",10000);
+
+INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Jewlry",3000);
+
+INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Musical Instruments",1500);
+
+SELECT *,(product_sales-over_head_costs) AS total_profits FROM departments;
