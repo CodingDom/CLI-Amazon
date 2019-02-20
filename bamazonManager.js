@@ -64,12 +64,16 @@ function addInventory() {
         if (err) throw err;
         const products = [];
         res.forEach(function(item) {
+            departments.push(item.department_name);
+            if (item.item_id) {
             products.push(item.product_name + " | ".red + "Quantity: ".yellow + item.stock_quantity + " | ".red + "id:" + item.item_id)
+            };
         });
+        departments.sort();
         inquirer.prompt([
             {
                 type: "search",
-                message : "Enter an item you would like to purchase",
+                message : "Enter an item you would like to restock",
                 name : "product",
                 source : function(answers, input) {
                     // If no search input, don't show products
@@ -104,7 +108,7 @@ function addInventory() {
             `UPDATE products SET stock_quantity=stock_quantity+${quantity} WHERE item_id=${id}`,
             function(err,res) {
                 if (err) throw err;
-                console.log(colors.green("Successfully added " + quantity + " more to the stock!\n"));
+                console.log(colors.green("\nSuccessfully added " + quantity + " more to the stock!\n"));
                 promptCommands();
             });
         });
@@ -112,46 +116,62 @@ function addInventory() {
 };
 
 function addProduct() {
-    inquirer.prompt([
-        {
-            message : "Enter the name of product",
-            name : "product"
-        },
-        {
-            type : "number",
-            message : "Enter price",
-            name : "price"
-        },
-        {
-            type : "number",
-            message : "Enter in amount of stock",
-            name : "quantity"
-        }
-    ]).then(function(resp) {
-        const product = resp.product.trim();
-        const price = parseFloat(resp.price);
-        const quantity = parseInt(resp.quantity);
-        if (!product || product == "") {
-            console.log("Invalid product name!".red);
-            return promptCommands();
-        } else if (!price || isNaN(price) || price < 0) {
-            console.log("Invalid price!".red);
-            return promptCommands();
-        } else if (!quantity || isNaN(quantity) || quantity < 0) {
-            console.log("Invalid quantity!".red);
-            return promptCommands();
-        };
-        connection.query(
-        `INSERT INTO products(product_name,price,stock_quantity) VALUES(?,?,?)`,
-        [
-            product,
-            price,
-            quantity
-        ],
-        function(err,res){
-            if (err) throw err;
-            console.log("Successfully added product to database!\n".green);
-            promptCommands();
+    connection.query(
+    "SELECT department_name FROM departments ORDER BY department_name",
+    function(err, res) {
+        if (err) throw err;
+        const departments = [];
+        res.forEach(function(d){
+            departments.push(d.department_name);
+        });
+        inquirer.prompt([
+            {
+                message : "Enter the name of product",
+                name : "product"
+            },
+            {
+                type : "number",
+                message : "Enter price",
+                name : "price"
+            },
+            {
+                type : "number",
+                message : "Enter in amount of stock",
+                name : "quantity"
+            },
+            {
+                type: "list",
+                message : "Choose a department",
+                choices : departments,
+                name : "department"
+            }
+        ]).then(function(resp) {
+            const product = resp.product.trim();
+            const price = parseFloat(resp.price);
+            const quantity = parseInt(resp.quantity);
+            if (!product || product == "") {
+                console.log("Invalid product name!".red);
+                return promptCommands();
+            } else if (!price || isNaN(price) || price < 0) {
+                console.log("Invalid price!".red);
+                return promptCommands();
+            } else if (!quantity || isNaN(quantity) || quantity < 0) {
+                console.log("Invalid quantity!".red);
+                return promptCommands();
+            };
+            connection.query(
+            `INSERT INTO products(product_name,price,stock_quantity,department_name) VALUES(?,?,?,?)`,
+            [
+                product,
+                price,
+                quantity,
+                resp.department
+            ],
+            function(err){
+                if (err) throw err;
+                console.log("\nSuccessfully added product to database!\n".green);
+                promptCommands();
+            });
         });
     });
 };
@@ -174,7 +194,7 @@ function promptCommands(wait=0) {
 commandList["Exit".red] = function() {
     console.log("\nNow quitting, goodbye!\n".yellow);
     connection.end();
-}
+};
 
 console.log("\nNow connecting to Bamazon Management System\n".green);
 

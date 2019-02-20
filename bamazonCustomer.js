@@ -10,6 +10,11 @@ const connection = mysql.createConnection(require("./mysql-config.json"));
 // Storing gathered products
 let products = [];
 
+const commandList = {
+    "View Products for Sale":displayProducts,
+    "Purchase an Item":promptPurchase
+};
+
 function displayProducts() {
     // Grabbing all stocked products information from database
     connection.query(
@@ -30,8 +35,8 @@ function displayProducts() {
         // Display table of products
         console.log(table.toString());
         products.sort();
-        // Prompt user to make a purchase
-        promptPurchase();
+
+        promptCommands();
     });
 };
 
@@ -80,7 +85,7 @@ function makePurchase(id,quantity) {
     } else if (quantity <= 0) {
         // If no quantity present, cancel request
         console.log("\nCancelling purchase request\n".yellow);
-        return connection.end();
+        return promptCommands();;
     };
     // Checking how many products are in stock
     connection.query(
@@ -100,13 +105,33 @@ function makePurchase(id,quantity) {
                 function(err2,res2) {
                     if (err2) throw err2;
                     console.log(`\nPurchase successful!\nTotal Cost: $${price}\n`.green);
-                    connection.end();
+                    promptCommands();
             });
         } else {
             console.log("\nSorry, we don't have enough in stock to fulfill your order..\n".red);
-            connection.end();
+            promptCommands();
         }
     });
+};
+
+function promptCommands(wait=0) {
+    setTimeout(function() {
+        inquirer.prompt([
+            {
+                type : "list",
+                message : "Select An Action",
+                choices : Object.keys(commandList),
+                name : "command"
+            }
+        ]).then(function(resp) {
+            commandList[resp.command]();
+        });
+    },wait*1000);
+};
+
+commandList["Exit".red] = function() {
+    console.log("\nNow quitting, goodbye!\n".yellow);
+    connection.end();
 };
 
 console.log("\nNow connecting to Bamazon\n".green);

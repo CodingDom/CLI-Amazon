@@ -6,11 +6,11 @@ const mysql = require("mysql");
 const connection = mysql.createConnection(require("./mysql-config.json"));
 
 const commandList = {
-    "View Product Sales by Department":displayProducts,
+    "View Product Sales by Department":displayDepartments,
     "Create New Department":addDepartment,
 };
 
-function displayProducts() {
+function displayDepartments() {
     // Grabbing all product information from database
     connection.query(
     "SELECT *,(product_sales - over_head_costs) AS total_profits FROM departments", 
@@ -39,10 +39,6 @@ function displayProducts() {
         promptCommands(0.75)
     });
 };
-
-function addDepartment() {
-
-}
 
 function promptCommands(wait=0) {
     setTimeout(function() {

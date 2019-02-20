@@ -35,10 +35,13 @@ SELECT * FROM products;
 
 -- Create mock departments to populate database
 INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Cell Phones & Accessories",10000);
+
+INSERT INTO departments (department_name,over_head_costs)
 VALUES ("Electronics",8000);
 
 INSERT INTO departments (department_name,over_head_costs)
-VALUES ("Cell Phones & Accessories",10000);
+VALUES ("Furniture",10000);
 
 INSERT INTO departments (department_name,over_head_costs)
 VALUES ("Jewelry",3000);
@@ -48,5 +51,8 @@ VALUES ("Musical Instruments",1500);
 
 INSERT INTO departments (department_name,over_head_costs)
 VALUES ("Miscellaneous",5000);
+
+INSERT INTO departments (department_name,over_head_costs)
+VALUES ("Toys",2000);
 
 SELECT *,(product_sales-over_head_costs) AS total_profits FROM departments;
