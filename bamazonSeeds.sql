@@ -20,10 +20,10 @@ INSERT INTO products (product_name,department_name,price,stock_quantity)
 VALUES ("Samsung Galaxy J7 Perx","Cell Phones & Accessories",200,75);
 
 INSERT INTO products (product_name,department_name,price,stock_quantity)
-VALUES ("Alex and Ani Womens Charity by Design Heart of Strength Bangle","Jewlry",30,100);
+VALUES ("Alex and Ani Womens Charity by Design Heart of Strength Bangle","Jewelry",30,100);
 
 INSERT INTO products (product_name,department_name,price,stock_quantity)
-VALUES ("Pandora Cassic Elegane Earrings","Jewlry",85,60);
+VALUES ("Pandora Cassic Elegane Earrings","Jewelry",85,60);
 
 INSERT INTO products (product_name,department_name,price,stock_quantity)
 VALUES ("Trumbone","Musical Instruments",700,5);
@@ -41,7 +41,7 @@ INSERT INTO departments (department_name,over_head_costs)
 VALUES ("Cell Phones & Accessories",10000);
 
 INSERT INTO departments (department_name,over_head_costs)
-VALUES ("Jewlry",3000);
+VALUES ("Jewelry",3000);
 
 INSERT INTO departments (department_name,over_head_costs)
 VALUES ("Musical Instruments",1500);

@@ -29,7 +29,7 @@ function displayProducts() {
             if (data.total_profits < 0) {
                 profit = colors.red("-$"+Math.abs(data.total_profits));
             } else {
-                profit = colors.green("$"+data.total_profits);
+                profit = colors.green("+$"+data.total_profits);
             }
             table.push([colors.yellow(data.department_id),colors.blue(data.department_name),colors.magenta("$"+data.over_head_costs.toFixed(2)),colors.green("$"+data.product_sales),profit]);
             products.push(data.product_name + " | ".red + "id:"+data.item_id);
