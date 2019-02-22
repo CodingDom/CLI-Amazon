@@ -32,7 +32,12 @@ Use "node bamazonCustomer.js" to test the customer's perpespective of the applic
 ```
 node bamazonCustomer.js
 ```
-
+```
+node bamazonManager.js
+```
+```
+node bamazonSupervisor.js
+```
 ## Preview
 
 ### Customer
